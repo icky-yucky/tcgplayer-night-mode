@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TCGplayer Night Mode</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="head">
+      <div class="moon" aria-hidden="true"></div>
+      <div class="head__text">
+        <h1>Night Mode</h1>
+        <p>tcgplayer.com</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="enabled" />
+        <span class="track"><span class="knob"></span></span>
+        <span class="sr">Enable night mode</span>
+      </label>
+    </header>
+
+    <section class="panel" id="panel">
+      <div class="row">
+        <label for="brightness">Brightness</label>
+        <output id="brightness-out">100%</output>
+        <input type="range" id="brightness" min="0.75" max="1.25" step="0.01" />
+      </div>
+
+      <div class="row">
+        <label for="contrast">Contrast</label>
+        <output id="contrast-out">100%</output>
+        <input type="range" id="contrast" min="0.8" max="1.2" step="0.01" />
+      </div>
+
+      <div class="row">
+        <label for="mediaBrightness">Image brightness</label>
+        <output id="mediaBrightness-out">92%</output>
+        <input type="range" id="mediaBrightness" min="0.6" max="1" step="0.01" />
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="fixFixed" />
+        <span>Keep pop-ups and menus anchored</span>
+      </label>
+    </section>
+
+    <footer class="foot">
+      <button type="button" id="reset">Reset</button>
+      <span class="hint">Alt&nbsp;+&nbsp;Shift&nbsp;+&nbsp;N</span>
+    </footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

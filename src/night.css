@@ -1,0 +1,128 @@
+/* TCGplayer Night Mode
+ * ---------------------------------------------------------------------------
+ * Strategy: invert the whole page, then invert media back so card art, product
+ * photos and videos keep their real colors. Everything is gated behind
+ * :root[data-tcgnm="on"] so content.js can kill the effect instantly on an
+ * already-loaded tab, without waiting for a reload.
+ */
+
+/* Sentinel: content.js reads this to know the stylesheet reached the frame. */
+:root {
+  --tcgnm-loaded: 1;
+}
+
+:root[data-tcgnm="on"] {
+  /* Defaults. content.js overwrites these inline from saved settings. */
+  --tcgnm-invert: 1;
+  --tcgnm-hue: 180deg;
+  --tcgnm-brightness: 1;
+  --tcgnm-contrast: 1;
+  --tcgnm-media-brightness: 0.92;
+
+  /* Near-white base so the inverted page lands on a near-black background
+     instead of leaving light gutters around short pages. */
+  background-color: #fbfbfb !important;
+
+  /* Keep native form controls light so inversion turns them dark. */
+  color-scheme: light;
+
+  filter:
+    invert(var(--tcgnm-invert))
+    hue-rotate(var(--tcgnm-hue))
+    brightness(var(--tcgnm-brightness))
+    contrast(var(--tcgnm-contrast));
+}
+
+/* --- Media: invert back to true color ------------------------------------ */
+
+:root[data-tcgnm="on"] :is(
+  img,
+  video,
+  canvas,
+  embed,
+  object,
+  iframe,
+  svg image,
+  [style*="background-image"],
+  [data-tcgnm-media]
+) {
+  filter: invert(1) hue-rotate(180deg) brightness(var(--tcgnm-media-brightness));
+}
+
+/* A media element nested inside another media element would be inverted twice
+   and come out wrong, so leave the inner one alone. */
+:root[data-tcgnm="on"] :is([style*="background-image"], [data-tcgnm-media]) :is(
+  img,
+  video,
+  canvas,
+  embed,
+  object,
+  iframe
+) {
+  filter: none;
+}
+
+/* Opt-out hook: add class="tcgnm-keep" to anything that should not be touched. */
+:root[data-tcgnm="on"] .tcgnm-keep {
+  filter: none !important;
+}
+
+/* --- position: fixed compensation ---------------------------------------- */
+/* A filter on :root makes it the containing block for fixed descendants, so
+   they anchor to the top of the document instead of the viewport. content.js
+   tags them and feeds the current scroll offset back in here. Uses the
+   `translate` property rather than `transform` so site animations survive. */
+
+:root[data-tcgnm="on"] [data-tcgnm-fixed="1"] {
+  translate: var(--tcgnm-scroll-x, 0px) var(--tcgnm-scroll-y, 0px);
+}
+
+/* --- Scrollbars ----------------------------------------------------------- */
+/* Mid-greys read the same whether or not the root filter reaches them. */
+
+:root[data-tcgnm="on"] ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+:root[data-tcgnm="on"] ::-webkit-scrollbar-track {
+  background: #6f6f6f;
+}
+
+:root[data-tcgnm="on"] ::-webkit-scrollbar-thumb {
+  background: #9a9a9a;
+  border-radius: 6px;
+}
+
+:root[data-tcgnm="on"] ::-webkit-scrollbar-thumb:hover {
+  background: #ababab;
+}
+
+/* --- TCGplayer-specific fixes -------------------------------------------- */
+/* The footer already ships dark (#121212) with white text, so a plain inversion
+   would turn it into a glaring white slab at the bottom of every page. Repaint
+   it light-on-dark here and the inversion lands it back where it belongs.
+
+   Note the heroes are deliberately NOT in this list: their art sits under a dark
+   scrim, and inverting the scrim to light while the art is restored to true
+   color already leaves dark text on a light backdrop, which reads fine.
+   Safe to delete any rule below if the site restyles it. */
+
+:root[data-tcgnm="on"] :is(
+  footer,
+  .footer__legal,
+  .footer__mobile__app-container
+) {
+  background-color: #f2f2f2 !important;
+}
+
+:root[data-tcgnm="on"] footer :where(*:not(img):not(svg):not(path):not(video)) {
+  color: #1f1f1f !important;
+  border-color: #cfcfcf !important;
+}
+
+/* Dropdowns, popovers and the search overlay sit above everything; give them a
+   solid base so the inverted page behind them does not bleed through. */
+:root[data-tcgnm="on"] :is(.dropdown-menu, .popover, .mp-header__autocomplete-overlay) {
+  background-color: #fdfdfd !important;
+}
