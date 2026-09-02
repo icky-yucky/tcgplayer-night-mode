@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Night Mode for TCGplayer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Unofficial dark theme for tcgplayer.com that keeps card images true to color.",
   "permissions": ["storage", "scripting"],
   "host_permissions": ["*://*.tcgplayer.com/*"],
