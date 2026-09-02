@@ -1,4 +1,4 @@
-/* TCGplayer Night Mode - page-side controller.
+/* Night Mode for TCGplayer - page-side controller.
  *
  * The stylesheet itself is registered by the service worker so it lands before
  * first paint (no white flash). This script:

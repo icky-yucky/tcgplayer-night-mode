@@ -1,4 +1,4 @@
-/* TCGplayer Night Mode - service worker.
+/* Night Mode for TCGplayer - service worker.
  *
  * Owns one job: make sure night.css is registered as a document_start content
  * script exactly when night mode is on, so pages paint dark on the very first
@@ -72,13 +72,13 @@ async function sync() {
       if (registered.length) await chrome.scripting.updateContentScripts([definition]);
       else await chrome.scripting.registerContentScripts([definition]);
     } catch (err) {
-      console.error('[TCGplayer Night Mode] could not register stylesheet:', err);
+      console.error('[Night Mode for TCGplayer] could not register stylesheet:', err);
     }
   } else if (registered.length) {
     try {
       await chrome.scripting.unregisterContentScripts({ ids: [SCRIPT_ID] });
     } catch (err) {
-      console.error('[TCGplayer Night Mode] could not unregister stylesheet:', err);
+      console.error('[Night Mode for TCGplayer] could not unregister stylesheet:', err);
     }
   }
 
@@ -90,7 +90,7 @@ async function paintBadge(enabled) {
     await chrome.action.setBadgeText({ text: enabled ? '' : 'off' });
     await chrome.action.setBadgeBackgroundColor({ color: '#4b5563' });
     await chrome.action.setTitle({
-      title: enabled ? 'TCGplayer Night Mode - on' : 'TCGplayer Night Mode - off'
+      title: enabled ? 'Night Mode for TCGplayer - on' : 'Night Mode for TCGplayer - off'
     });
   } catch (_) {
     /* badge is cosmetic */

@@ -1,4 +1,4 @@
-/* TCGplayer Night Mode
+/* Night Mode for TCGplayer
  * ---------------------------------------------------------------------------
  * Strategy: invert the whole page, then invert media back so card art, product
  * photos and videos keep their real colors. Everything is gated behind
