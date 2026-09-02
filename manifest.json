@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "TCGplayer Night Mode",
+  "name": "Night Mode for TCGplayer",
   "version": "1.0.0",
-  "description": "A dark theme for TCGplayer that keeps card images true to color.",
+  "description": "Unofficial dark theme for tcgplayer.com that keeps card images true to color.",
   "permissions": ["storage", "scripting"],
   "host_permissions": ["*://*.tcgplayer.com/*"],
   "background": {
@@ -18,7 +18,7 @@
   ],
   "action": {
     "default_popup": "src/popup.html",
-    "default_title": "TCGplayer Night Mode",
+    "default_title": "Night Mode for TCGplayer",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",
@@ -35,7 +35,7 @@
   "commands": {
     "toggle-night-mode": {
       "suggested_key": { "default": "Alt+Shift+N" },
-      "description": "Toggle TCGplayer night mode"
+      "description": "Toggle night mode"
     }
   },
   "web_accessible_resources": [

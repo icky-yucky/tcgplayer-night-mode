@@ -1,7 +1,11 @@
-# TCGplayer Night Mode
+# Night Mode for TCGplayer
 
 A dark theme for [tcgplayer.com](https://www.tcgplayer.com) that keeps card
 images, product photos and set icons at their true colors.
+
+> **Unofficial.** An independent, community-built extension. Not affiliated with,
+> authorized by, endorsed by, or sponsored by TCGplayer, Inc. or its affiliates.
+> The name is used only to describe the site this extension restyles.
 
 ## Install (Chrome, Edge, Brave, Opera)
 
@@ -89,3 +93,14 @@ The manifest targets Chromium. Firefox needs two changes: swap
   dark will come out light until a rule is added for it.
 - Logos with dark artwork on a transparent background are inverted back to their
   true colors, which can leave them low-contrast on the dark page.
+
+## Trademarks and content
+
+"TCGplayer" and related names, logos and marks are trademarks of TCGplayer, Inc.
+or its affiliates. This project is not affiliated with or endorsed by them, and
+uses the name solely to identify the site the extension is built for.
+
+The extension restyles pages in your own browser. It redistributes no card art,
+product images, or page content — all of which remain the property of their
+respective owners. The MIT license in [LICENSE](LICENSE) covers this extension's
+own source code only.

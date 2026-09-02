@@ -168,3 +168,12 @@ input[type="range"] {
   font-size: 11px;
   color: var(--muted);
 }
+
+/* Trademark notice: this extension is independent of TCGplayer. */
+.disclaimer {
+  margin: 10px 0 0;
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--muted);
+  text-align: center;
+}
