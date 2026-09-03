@@ -38,7 +38,7 @@ why card art stays true to color instead of coming out as a negative. That
 approach adapts on its own when TCGplayer ships layout changes, unlike a
 stylesheet that hardcodes their class names.
 
-Two details are worth knowing:
+Three details are worth knowing:
 
 - **No white flash.** The stylesheet is registered by the service worker as a
   `document_start` content script, so it applies before first paint. Turning
@@ -51,6 +51,15 @@ Two details are worth knowing:
   `translate` property (chosen over `transform` so site animations still work).
   That's the "Keep pop-ups anchored" checkbox; turn it off if you ever suspect
   it of misbehaving.
+
+  Finding those elements is the only part of the extension with a real cost, since
+  deciding whether something is fixed means asking for its computed style. It runs off
+  mutation records — only what actually changed gets looked at — with a slow full sweep
+  behind it to catch anything a mutation did not name.
+- **Top frame only.** The theme deliberately does not run inside iframes. A frame that
+  inverted itself would come out inverted twice, because the parent page already
+  un-inverts the `iframe` element along with every other media element to keep it true to
+  colour. The parent's pass is the correct one and works whatever the frame's origin.
 
 ## Layout
 

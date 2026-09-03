@@ -40,7 +40,7 @@ async function init() {
   }
 
   el('reset').addEventListener('click', async () => {
-    await chrome.storage.sync.set(DEFAULTS);
+    await write(DEFAULTS);
     render(DEFAULTS);
   });
 }
@@ -63,12 +63,33 @@ function percent(value) {
 /* Dragging a slider fires input on every pixel; coalesce those writes into one
    pending patch so a fast move between two sliders cannot drop either value. */
 function save(patch, debounced = false) {
-  if (!debounced) return void chrome.storage.sync.set(patch);
+  if (!debounced) return void write(patch);
   pending = { ...(pending || {}), ...patch };
   clearTimeout(writeTimer);
   writeTimer = setTimeout(() => {
     const batch = pending;
     pending = null;
-    chrome.storage.sync.set(batch);
+    write(batch);
   }, 80);
+}
+
+/* storage.sync allows on the order of 120 writes a minute. The debounce above makes that
+   unlikely, but a throttled write used to reject with nobody listening, so the setting
+   silently failed to stick. Retry once, then fall back to local storage — the content
+   script already listens to both areas — and say so rather than failing quietly. */
+async function write(patch, retried = false) {
+  try {
+    await chrome.storage.sync.set(patch);
+  } catch (err) {
+    if (!retried) {
+      setTimeout(() => write(patch, true), 400);
+      return;
+    }
+    try {
+      await chrome.storage.local.set(patch);
+      console.warn('[Night Mode for TCGplayer] sync storage unavailable, kept locally:', err);
+    } catch (err2) {
+      console.error('[Night Mode for TCGplayer] could not save settings:', err2);
+    }
+  }
 }

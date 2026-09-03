@@ -50,7 +50,17 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   return true; // async response
 });
 
-async function sync() {
+/* onInstalled, onStartup, a storage change and the module-level call on wake can all land at
+   once. Each one reads the registration list and then registers, so unserialised they raced
+   and one lost with a duplicate-id error. Chaining makes the last writer win cleanly. */
+let syncChain = Promise.resolve();
+
+function sync() {
+  syncChain = syncChain.then(doSync, doSync);
+  return syncChain;
+}
+
+async function doSync() {
   const { enabled } = await chrome.storage.sync.get({ enabled: DEFAULTS.enabled });
 
   let registered = [];
@@ -66,7 +76,9 @@ async function sync() {
       matches: MATCHES,
       css: [CSS_FILE],
       runAt: 'document_start',
-      allFrames: true
+      // Top frame only. A sub-frame that filtered itself would be inverted twice, since the
+      // parent's media rule already un-inverts the iframe element to keep it true to colour.
+      allFrames: false
     };
     try {
       if (registered.length) await chrome.scripting.updateContentScripts([definition]);
